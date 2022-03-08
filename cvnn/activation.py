@@ -171,44 +171,6 @@ class TanhExp(nn.Module):
         inplace_str = 'inplace=True' if self.inplace else ''
         return inplace_str
 
-class SmeLU(nn.Module):
-    __constants__ = ['beta', 'rounding_mode', 'inplace']
-    beta: float
-    rounding_mode: str
-    inplace: bool
-
-    def __init__(self, beta: float = 1., rounding_mode: str = None, inplace: bool = False):
-        super(SmeLU, self).__init__()
-        self.beta = beta
-        self.rounding_mode = rounding_mode
-        self.inplace = inplace
-
-    def forward(self, input: Tensor) -> Tensor:
-        return cF.smelu(input, rounding_mode=self.rounding_mode, inplace=self.inplace)
-
-    def extra_repr(self) -> str:
-        inplace_str = 'inplace=True' if self.inplace else ''
-        return 'beta={}, rounding_mode={}, inplace_str={}'.format(self.beta, self.rounding_mode, inplace_str)
-
-class SigRESCU(nn.Module):
-    __constants__ = ['beta', 'rounding_mode', 'inplace']
-    beta: float
-    rounding_mode: str
-    inplace: bool
-
-    def __init__(self, beta: float = 1., rounding_mode: str = None, inplace: bool = False):
-        super(SigRESCU, self).__init__()
-        self.beta = beta
-        self.rounding_mode = rounding_mode
-        self.inplace = inplace
-
-    def forward(self, input: Tensor) -> Tensor:
-        return cF.sig_rescu(input, rounding_mode=self.rounding_mode, inplace=self.inplace)
-
-    def extra_repr(self) -> str:
-        inplace_str = 'inplace=True' if self.inplace else ''
-        return 'beta={}, rounding_mode={}, inplace_str={}'.format(self.beta, self.rounding_mode, inplace_str)
-
 class RGLU(nn.Module):
     __constants__ = ['inplace']
     inplace: bool
@@ -219,6 +181,21 @@ class RGLU(nn.Module):
 
     def forward(self, input: Tensor) -> Tensor:
         return cF.r_glu(input, inplace=self.inplace)
+
+    def extra_repr(self) -> str:
+        inplace_str = 'inplace=True' if self.inplace else ''
+        return inplace_str
+
+class RSquaredReLU(nn.Module):
+    __constants__ = ['inplace']
+    inplace: bool
+
+    def __init__(self, inplace: bool = False):
+        super(RSquaredReLU, self).__init__()
+        self.inplace = inplace
+
+    def forward(self, input: Tensor) -> Tensor:
+        return cF.r_sqr_relu(input, inplace=self.inplace)
 
     def extra_repr(self) -> str:
         inplace_str = 'inplace=True' if self.inplace else ''

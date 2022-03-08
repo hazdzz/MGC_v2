@@ -180,6 +180,15 @@ def r_glu(input: Tensor, inplace: bool = False) -> Tensor:
     else:
         return F.silu(input=input, inplace=inplace)
 
+def r_sqr_relu(input: Tensor, inplace: bool = False) -> Tensor:
+    if input.is_complex():
+        if torch.equal(input.real, torch.zeros_like(input.real)):
+            return torch.mul(F.relu(input=input.imag, inplace=inplace), F.relu(input=input.imag, inplace=inplace))
+        else:
+            return torch.mul(F.relu(input=input.real, inplace=inplace), F.relu(input=input.imag, inplace=inplace))
+    else:
+        return torch.mul(F.relu(input=input, inplace=inplace), F.relu(input=input, inplace=inplace))
+
 def mod_softmax(input: Tensor, dim: Optional[int] = None, _stacklevel: int = 3, dtype: Optional[int] = None) -> Tensor:
     if input.is_complex():
         return F.softmax(torch.abs(input), dim=dim, _stacklevel=_stacklevel, dtype=dtype)
