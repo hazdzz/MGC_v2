@@ -134,38 +134,6 @@ def tanh_exp(input: Tensor, inplace: bool = False) -> Tensor:
         tanh_exp = torch.mul(input, torch.tanh(torch.exp(input))).type(input.type())
         return tanh_exp
 
-def smelu(input: Tensor, beta: float = 1., rounding_mode: str = None, inplace: bool = False) -> Tensor:
-    if inplace:
-        if input <= -beta:
-            input = 0
-        elif input >= beta:
-            input = input
-        else:
-            input = torch.div(input=torch.pow(input + beta, 2), other=4 * beta, rounding_mode=rounding_mode)
-        return input
-    else:
-        if input <= -beta:
-            smelu = 0
-        elif input >= beta:
-            smelu = input
-        else:
-            smelu = torch.div(input=torch.pow(input + beta, 2), other=4 * beta, rounding_mode=rounding_mode)
-        return smelu
-
-def sig_rescu(input: Tensor, beta: float = 1., rounding_mode: str = None, inplace: bool = False) -> Tensor:
-    if inplace:
-        if input <= beta:
-            input = 2 * beta * torch.sigmoid(torch.div(input=2 * (input - beta), other=beta, rounding_mode=rounding_mode))
-        else:
-            input = input
-        return input
-    else:
-        if input <= beta:
-            sig_rescu = 2 * beta * torch.sigmoid(torch.div(input=2 * (input - beta), other=beta, rounding_mode=rounding_mode))
-        else:
-            sig_rescu = input
-        return sig_rescu
-
 def r_glu(input: Tensor, inplace: bool = False) -> Tensor:
     if input.is_complex():
         if torch.equal(input.real, torch.zeros_like(input.real)):
