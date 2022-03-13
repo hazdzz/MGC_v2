@@ -148,6 +148,20 @@ def r_glu(input: Tensor, inplace: bool = False) -> Tensor:
     else:
         return F.silu(input=input, inplace=inplace)
 
+def r_gteu(input: Tensor, inplace: bool = False) -> Tensor:
+    if input.is_complex():
+        if torch.equal(input.real, torch.zeros_like(input.real)):
+            return tanh_exp(input=input.imag, inplace=inplace)
+        else:
+            if inplace:
+                input = torch.mul(input.real, torch.tanh(torch.exp(input.imag)))
+                return input
+            else:
+                r_gteu = torch.mul(input.real, torch.tanh(torch.exp(input.imag)))
+                return r_gteu
+    else:
+        return tanh_exp(input=input, inplace=inplace)
+
 def r_sqr_relu(input: Tensor, inplace: bool = False) -> Tensor:
     if input.is_complex():
         if torch.equal(input.real, torch.zeros_like(input.real)):

@@ -186,6 +186,21 @@ class RGLU(nn.Module):
         inplace_str = 'inplace=True' if self.inplace else ''
         return inplace_str
 
+class RGTEU(nn.Module):
+    __constants__ = ['inplace']
+    inplace: bool
+
+    def __init__(self, inplace: bool = False):
+        super(RGTEU, self).__init__()
+        self.inplace = inplace
+
+    def forward(self, input: Tensor) -> Tensor:
+        return cF.r_gteu(input, inplace=self.inplace)
+
+    def extra_repr(self) -> str:
+        inplace_str = 'inplace=True' if self.inplace else ''
+        return inplace_str
+
 class RSquaredReLU(nn.Module):
     __constants__ = ['inplace']
     inplace: bool
