@@ -92,10 +92,12 @@ def calc_mag_gso(dir_adj, gso_type, q):
             trs = id # Fake
 
         if gso_type == 'sym_renorm_mag_adj' or gso_type == 'rw_renorm_mag_adj' \
+            or gso_type == 'neg_sym_renorm_mag_adj' or gso_type == 'neg_rw_renorm_mag_adj' \
             or gso_type == 'sym_renorm_mag_lap' or gso_type == 'rw_renorm_mag_lap':
             adj = adj + id
 
         if gso_type == 'sym_norm_mag_adj' or gso_type == 'sym_renorm_mag_adj' \
+            or  gso_type == 'neg_sym_norm_mag_adj' or gso_type == 'neg_sym_renorm_mag_adj' \
             or gso_type == 'sym_norm_mag_lap' or gso_type == 'sym_renorm_mag_lap':
             row_sum = np.sum(adj, axis=1)
             row_sum_inv_sqrt = np.power(row_sum, -0.5)
@@ -111,13 +113,16 @@ def calc_mag_gso(dir_adj, gso_type, q):
             else:
                 sym_norm_mag_adj = np.multiply(sym_norm_adj, trs)
 
-            if gso_type == 'sym_norm_mag_lap' or gso_type == 'sym_renorm_mag_lap':
+            if gso_type == 'neg_sym_norm_mag_adj' or gso_type == 'neg_sym_renorm_mag_adj':
+                gso = -1 * sym_norm_mag_adj
+            elif gso_type == 'sym_norm_mag_lap' or gso_type == 'sym_renorm_mag_lap':
                 sym_norm_mag_lap = id - sym_norm_mag_adj
                 gso = sym_norm_mag_lap
             else:
                 gso = sym_norm_mag_adj
 
         elif gso_type == 'rw_norm_mag_adj' or gso_type == 'rw_renorm_mag_adj' \
+            or gso_type == 'neg_rw_norm_mag_adj' or gso_type == 'neg_rw_renorm_mag_adj' \
             or gso_type == 'rw_norm_mag_lap' or gso_type == 'rw_renorm_mag_lap':
             row_sum = np.sum(adj, axis=1).A1
             row_sum_inv = np.power(row_sum, -1)
@@ -133,7 +138,9 @@ def calc_mag_gso(dir_adj, gso_type, q):
             else:
                 rw_norm_mag_adj = np.multiply(rw_norm_adj, trs)
 
-            if gso_type == 'rw_norm_mag_lap' or gso_type == 'rw_renorm_mag_lap':
+            if gso_type == 'neg_rw_norm_mag_adj' or gso_type == 'neg_rw_renorm_mag_adj':
+                gso = -1 * rw_norm_mag_adj
+            elif gso_type == 'rw_norm_mag_lap' or gso_type == 'rw_renorm_mag_lap':
                 rw_norm_mag_lap = id - rw_norm_mag_adj
                 gso = rw_norm_mag_lap
             else:

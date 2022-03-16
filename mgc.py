@@ -43,7 +43,7 @@ def get_parameters():
     parser.add_argument('--q', type=float, default=0, help='electric charge paramete q in [0, 0.5]')
     parser.add_argument('--K', type=int, default=64, help='K order')
     parser.add_argument('--lr', type=float, default=0.01, help='learning rate')
-    parser.add_argument('--weight_decay', type=float, default=0.001, help='weight decay (L2 penalty)')
+    parser.add_argument('--weight_decay', type=float, default=0.0001, help='weight decay (L2 penalty)')
     parser.add_argument('--n_hid', type=int, default=64, help='the channel size of hidden layer feature, default as 64')
     parser.add_argument('--enable_bias', type=bool, default=True, help='default as True')
     parser.add_argument('--droprate', type=float, default=0, help='dropout rate, default as 0.5')
