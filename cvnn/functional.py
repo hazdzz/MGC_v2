@@ -137,16 +137,26 @@ def tanh_exp(input: Tensor, inplace: bool = False) -> Tensor:
 def r_glu(input: Tensor, inplace: bool = False) -> Tensor:
     if input.is_complex():
         if torch.equal(input.real, torch.zeros_like(input.real)):
-            return F.silu(input=input.imag, inplace=inplace)
-        else:
             if inplace:
-                input = torch.mul(input.real, torch.sigmoid(input.imag))
+                input = torch.mul(input.imag, torch.sigmoid(1.702 * input.imag))
                 return input
             else:
-                r_glu = torch.mul(input.real, torch.sigmoid(input.imag))
+                r_glu = torch.mul(input.imag, torch.sigmoid(1.702 * input.imag))
+                return r_glu
+        else:
+            if inplace:
+                input = torch.mul(input.real, torch.sigmoid(1.702 * input.imag))
+                return input
+            else:
+                r_glu = torch.mul(input.real, torch.sigmoid(1.702 * input.imag))
                 return r_glu
     else:
-        return F.silu(input=input, inplace=inplace)
+        if inplace:
+            input = torch.mul(input, torch.sigmoid(1.702 * input))
+            return input
+        else:
+            r_glu = torch.mul(input, torch.sigmoid(1.702 * input))
+            return r_glu
 
 def r_gteu(input: Tensor, inplace: bool = False) -> Tensor:
     if input.is_complex():

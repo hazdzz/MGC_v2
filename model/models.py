@@ -15,8 +15,6 @@ class MGC(nn.Module):
         self.r_glu = act.RGLU()
         self.r_gteu = act.RGTEU()
         self.r_relu_2 = act.RSquaredReLU()
-        self.relu = nn.ReLU()
-        self.tanh = nn.Tanh()
         self.dropout = nn.Dropout(p=droprate)
         self.log_softmax = nn.LogSoftmax(dim=1)
 
