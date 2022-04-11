@@ -32,7 +32,7 @@ def set_env(seed):
 def get_parameters():
     parser = argparse.ArgumentParser(description='MGC')
     parser.add_argument('--enable_cuda', type=bool, default=True, help='enable or disable CUDA, default as True')
-    parser.add_argument('--seed', type=int, default=42, help='set the random seed for stabilizing experiment results')
+    parser.add_argument('--seed', type=int, default=567, help='set the random seed for stabilizing experiment results')
     parser.add_argument('--mode', type=str, default='test', choices=['tuning', 'test'], \
                         help='running mode, default as test, tuning as alternative')
     parser.add_argument('--dataset', type=str, default='corar')
@@ -41,7 +41,7 @@ def get_parameters():
                         choices=['sym_renorm_mag_adj', 'rw_renorm_mag_adj', 'sym_renorm_mag_lap', 'rw_renorm_mag_lap'], \
                         help='graph shift operator')
     parser.add_argument('--q', type=float, default=0, help='electric charge paramete q in [0, 0.5]')
-    parser.add_argument('--K', type=int, default=64, help='K order')
+    parser.add_argument('--K', type=int, default=32, help='K order')
     parser.add_argument('--lr', type=float, default=0.01, help='learning rate')
     parser.add_argument('--weight_decay', type=float, default=0.0001, help='weight decay (L2 penalty)')
     parser.add_argument('--n_hid', type=int, default=64, help='the channel size of hidden layer feature, default as 64')

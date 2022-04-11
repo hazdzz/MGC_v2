@@ -12,17 +12,13 @@ class MGC(nn.Module):
         else:
             self.graph_aug_linear = nn.Linear(in_features=n_feat, out_features=n_hid, bias=enable_bias)
         self.linear = nn.Linear(in_features=n_hid, out_features=n_class, bias=enable_bias)
-        self.r_glu = act.RGLU()
         self.r_gteu = act.RGTEU()
-        self.r_relu_2 = act.RSquaredReLU()
         self.dropout = nn.Dropout(p=droprate)
         self.log_softmax = nn.LogSoftmax(dim=1)
 
     def forward(self, x):
         x = self.graph_aug_linear(x)
-        x = self.r_glu(x)
-        #x = self.r_gteu(x)
-        #x = self.r_relu_2(x)
+        x = self.r_gteu(x)
         x = self.dropout(x)
         x = self.linear(x)
         x = self.log_softmax(x)

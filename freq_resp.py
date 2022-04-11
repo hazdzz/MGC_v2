@@ -4,7 +4,7 @@ import scipy.sparse as sp
 from scipy.linalg import eigvalsh
 
 def norm_feat(feature):
-    feature = feature.astype(dtype=np.float32)
+    feature = feature.astype(dtype=np.float64)
     if sp.issparse(feature):
         row_sum = feature.sum(axis=1).A1
         row_sum_inv = np.power(row_sum, -1)
@@ -16,7 +16,7 @@ def norm_feat(feature):
         row_sum_inv[np.isinf(row_sum_inv)] = 0.
         deg_inv = np.diag(row_sum_inv)
         norm_feature = deg_inv.dot(feature)
-        norm_feature = np.array(norm_feature, dtype=np.float32)
+        norm_feature = np.array(norm_feature, dtype=np.float64)
 
     return norm_feature
 
@@ -50,11 +50,9 @@ def calc_mag_gso(dir_adj, gso_type, q):
         #adj = 0.5 * (dir_adj + dir_adj.transpose())
         
         if q != 0:
-            dir = dir_adj - dir_adj.transpose()
+            dir = dir_adj.transpose() - dir_adj
             trs = np.exp(1j * 2 * np.pi * q * dir.toarray())
             trs = sp.csc_matrix(trs)
-            if q == 0.25:
-                trs = id + 1j * trs.imag
         else:
             trs = id # Fake
     
@@ -122,11 +120,9 @@ def calc_mag_gso(dir_adj, gso_type, q):
         adj = np.maximum(dir_adj, dir_adj.T)
         #adj = 0.5 * (dir_adj + dir_adj.T)
 
-        if q != 0 and q != 0.25:
-            dir = dir_adj - dir_adj.T
+        if q != 0:
+            dir = dir_adj.T - dir_adj
             trs = np.exp(1j * 2 * np.pi * q * dir)
-            if q == 0.25:
-                trs = id + 1j * trs.imag
         else:
             trs = id # Fake
 
@@ -185,15 +181,23 @@ def calc_mag_gso(dir_adj, gso_type, q):
 
 dataset = 'wisconsin'
 gso_type = 'sym_renorm_mag_lap'
-q = 1/4
+q = 1/6
 feature, adj, label, idx_train, idx_val, idx_test, n_feat, n_class = load_webkb_data(dataset)
 gso = calc_mag_gso(adj, gso_type, q)
 
 if sp.issparse(gso):
     gso = gso.toarray()
+    if q == 0 or q == 0.5:
+        gso = gso.astype(np.float64)
+    else:
+        gso = gso.astype(np.complex128)
     eigval = eigvalsh(a=gso).real
     eigval = np.sort(eigval)
 else:
+    if q == 0 or q == 0.5:
+        gso = gso.astype(np.float64)
+    else:
+        gso = gso.astype(np.complex128)
     eigval = eigvalsh(a=gso).real
     eigval = np.sort(eigval)
 

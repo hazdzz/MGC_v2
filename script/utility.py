@@ -11,11 +11,9 @@ def calc_mag_gso(dir_adj, gso_type, q):
         #adj = 0.5 * (dir_adj + dir_adj.transpose())
         
         if q != 0:
-            dir = dir_adj - dir_adj.transpose()
+            dir = dir_adj.transpose() - dir_adj
             trs = np.exp(1j * 2 * np.pi * q * dir.toarray())
             trs = sp.csc_matrix(trs)
-            if q == 0.25:
-                trs = id + 1j * trs.imag
         else:
             trs = id # Fake
     
@@ -83,11 +81,9 @@ def calc_mag_gso(dir_adj, gso_type, q):
         adj = np.maximum(dir_adj, dir_adj.T)
         #adj = 0.5 * (dir_adj + dir_adj.T)
 
-        if q != 0 and q != 0.25:
-            dir = dir_adj - dir_adj.T
+        if q != 0:
+            dir = dir_adj.T - dir_adj
             trs = np.exp(1j * 2 * np.pi * q * dir)
-            if q == 0.25:
-                trs = id + 1j * trs.imag
         else:
             trs = id # Fake
 

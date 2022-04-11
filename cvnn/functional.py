@@ -134,30 +134,6 @@ def tanh_exp(input: Tensor, inplace: bool = False) -> Tensor:
         tanh_exp = torch.mul(input, torch.tanh(torch.exp(input))).type(input.type())
         return tanh_exp
 
-def r_glu(input: Tensor, inplace: bool = False) -> Tensor:
-    if input.is_complex():
-        if torch.equal(input.real, torch.zeros_like(input.real)):
-            if inplace:
-                input = torch.mul(input.imag, torch.sigmoid(1.702 * input.imag))
-                return input
-            else:
-                r_glu = torch.mul(input.imag, torch.sigmoid(1.702 * input.imag))
-                return r_glu
-        else:
-            if inplace:
-                input = torch.mul(input.real, torch.sigmoid(1.702 * input.imag))
-                return input
-            else:
-                r_glu = torch.mul(input.real, torch.sigmoid(1.702 * input.imag))
-                return r_glu
-    else:
-        if inplace:
-            input = torch.mul(input, torch.sigmoid(1.702 * input))
-            return input
-        else:
-            r_glu = torch.mul(input, torch.sigmoid(1.702 * input))
-            return r_glu
-
 def r_gteu(input: Tensor, inplace: bool = False) -> Tensor:
     if input.is_complex():
         if torch.equal(input.real, torch.zeros_like(input.real)):
@@ -171,15 +147,6 @@ def r_gteu(input: Tensor, inplace: bool = False) -> Tensor:
                 return r_gteu
     else:
         return tanh_exp(input=input, inplace=inplace)
-
-def r_sqr_relu(input: Tensor, inplace: bool = False) -> Tensor:
-    if input.is_complex():
-        if torch.equal(input.real, torch.zeros_like(input.real)):
-            return torch.mul(F.relu(input=input.imag, inplace=inplace), F.relu(input=input.imag, inplace=inplace))
-        else:
-            return torch.mul(F.relu(input=input.real, inplace=inplace), F.relu(input=input.imag, inplace=inplace))
-    else:
-        return torch.mul(F.relu(input=input, inplace=inplace), F.relu(input=input, inplace=inplace))
 
 def mod_softmax(input: Tensor, dim: Optional[int] = None, _stacklevel: int = 3, dtype: Optional[int] = None) -> Tensor:
     if input.is_complex():
